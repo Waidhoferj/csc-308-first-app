@@ -79,5 +79,5 @@ def handle_user_by_id(id):
       for user in users:
          if user["id"] == id:
             users.remove(user)
-            return "User Deleted", 200
+            return {}, 204
       return "This person doesn't exist", 404

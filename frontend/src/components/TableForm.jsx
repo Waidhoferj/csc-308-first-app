@@ -16,11 +16,11 @@ const submitButtonCss = css`
 
 export default function TableForm() {
   const { onAdd, fields } = useContext(TableContext);
-
+  const inputCategories = fields.filter((f) => f !== "Id");
   const firstFieldRef = useRef(null);
 
   function createFields() {
-    return fields.reduce((fieldsObj, field) => {
+    return inputCategories.reduce((fieldsObj, field) => {
       fieldsObj[field] = "";
       return fieldsObj;
     }, {});
@@ -37,7 +37,7 @@ export default function TableForm() {
     firstFieldRef.current?.focus();
   }
 
-  const inputFields = fields.map((field, i) => {
+  const inputFields = inputCategories.map((field, i) => {
     const onFieldChange = (e) =>
       setFieldContents((contents) => ({
         ...contents,

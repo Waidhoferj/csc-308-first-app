@@ -8,14 +8,14 @@ import { useState, useEffect } from "react";
 
 axios.defaults.baseURL = "http://127.0.0.1:5000/";
 
-const fields = ["Name", "Job"];
+const fields = ["Name", "Job", "Id"];
 
 const tableWrapperCss = css`
   padding: 50px;
   border: 2px solid #32324a;
   border-radius: 20px;
   margin: 10px;
-  max-width: 600px;
+  width: min-content;
   text-align: center;
   margin: auto;
   background: #1a1a2b;
