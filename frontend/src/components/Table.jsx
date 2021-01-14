@@ -24,8 +24,8 @@ export default function Table({ onAdd, onDelete, fields, contents }) {
   return (
     <TableContext.Provider value={{ onAdd, onDelete, fields }}>
       <table css={tableCss}>
-        <TableHeader fields={fields} />
-        <TableBody contents={contents} />
+        <TableHeader />
+        <TableBody contents={contents} onDelete={onDelete} />
       </table>
     </TableContext.Provider>
   );

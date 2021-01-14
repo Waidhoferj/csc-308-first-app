@@ -50,12 +50,11 @@ export default function TableForm() {
         : {};
 
     return (
-      <td css={inputColCss}>
+      <td css={inputColCss} key={field}>
         <input
           type="text"
           ref={i === 0 ? firstFieldRef : null}
           value={fieldContents[field]}
-          key={field}
           onInput={onFieldChange}
           placeholder={`Enter ${field}`}
           style={errorStyles}

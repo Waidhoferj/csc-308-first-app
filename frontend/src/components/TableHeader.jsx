@@ -1,5 +1,7 @@
 /**@jsxImportSource @emotion/react*/
 import { css } from "@emotion/react";
+import { useContext } from "react";
+import { TableContext } from "./Table";
 
 const headerCss = css`
   padding: 10px;
@@ -13,7 +15,8 @@ const colCss = css`
 
 const titleCase = (str) => str[0].toUpperCase() + str.slice(1);
 
-export default function TableHeader({ fields }) {
+export default function TableHeader() {
+  const { fields } = useContext(TableContext);
   return (
     <thead css={headerCss}>
       <tr css={rowCSS}>

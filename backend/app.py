@@ -1,6 +1,10 @@
 from flask import jsonify, request, Flask
+import uuid
+from flask_cors import CORS
+
 
 app = Flask(__name__)
+CORS(app)
 
 users = [
       { 
@@ -32,7 +36,12 @@ users = [
 
 @app.route("/")
 def hello_world():
-    return "Hello World!"
+    return jsonify({
+       "routes": {
+          "users" :"/users(name)",
+          "user": "user/<id>"
+       }
+    })
 
 @app.route("/users", methods=["GET", "POST", "DELETE"])
 def handle_users():
@@ -45,18 +54,20 @@ def handle_users():
          return {"users": users}
    elif request.method == "POST":
       payload = request.get_json()
-      if payload:
-         users["user_list"].append(payload)
-         return "added user", 201
+      if payload and"name" in payload and "job" in payload:
+         id = uuid.uuid1().hex
+         person = {"name" : payload["name"], "job" : payload["job"], "id" : id }
+         users.append(person)
+         return id, 201
       else:
          return "Please include a payload in your post request", 400
    elif request.method == "DELETE":
       username = request.args.get("name")
       users = [u for u in users if u["name"] != username]
-      return f"Users with name `{username}` deleted", 200
+      return False, 200
 
    else:
-      return "Bad request", 400
+      return "This person doesn't exist", 404
 
    
 @app.route("/user/<id>", methods=["GET", "DELETE"])
@@ -69,4 +80,4 @@ def handle_user_by_id(id):
          if user["id"] == id:
             users.remove(user)
             return "User Deleted", 200
-      return "User Not Found", 400
+      return "This person doesn't exist", 404

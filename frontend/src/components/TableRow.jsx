@@ -1,5 +1,7 @@
 /**@jsxImportSource @emotion/react*/
 import { css } from "@emotion/react";
+import { useContext } from "react";
+import { TableContext } from "./Table";
 
 const rowCss = css`
   &:first-child {
@@ -22,16 +24,17 @@ const deleteButtonCss = css`
   background: red;
 `;
 
-export default function TableRow({ entry, onDelete }) {
+export default function TableRow({ entry }) {
+  const { onDelete, fields } = useContext(TableContext);
   return (
     <tr css={rowCss}>
-      {Object.values(entry).map((val, i) => (
-        <td key={i} css={colCss}>
-          {val}
+      {fields.map((field) => (
+        <td key={field} css={colCss}>
+          {entry[field.toLowerCase()]}
         </td>
       ))}
       <td>
-        <button css={deleteButtonCss} onClick={onDelete}>
+        <button css={deleteButtonCss} onClick={() => onDelete(entry.id)}>
           Delete
         </button>
       </td>

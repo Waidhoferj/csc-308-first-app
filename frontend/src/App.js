@@ -4,9 +4,9 @@ import Table from "./components/Table";
 import axios from "axios";
 
 import { css } from "@emotion/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-axios.defaults.url = "http://localhost:5000";
+axios.defaults.baseURL = "http://127.0.0.1:5000/";
 
 const fields = ["Name", "Job"];
 
@@ -34,35 +34,40 @@ const dividerCss = css`
 function App() {
   const [people, setPeople] = useState([]);
 
-  function addPerson() {
-    axios.post("/users");
-  }
-
-  function deletePerson() {}
-
   function getPeople() {
-    axios.post("/users").then(({ data }) => {});
+    axios
+      .get("/users")
+      .then(({ data }) => setPeople(data.users))
+      .catch((err) => console.error(err));
   }
 
-  function handleAdd(fieldContents) {
+  function addPerson(personData) {
     let person = {};
-    for (let key in fieldContents) {
-      person[key.toLowerCase()] = fieldContents[key];
+    for (let key in personData) {
+      person[key.toLowerCase()] = personData[key];
     }
-    setPeople([...people, person]);
+    axios.post("/users", person).then(({ data }) => {
+      person.id = data;
+      const updatedPeople = [...people, person];
+      setPeople(updatedPeople);
+    });
   }
 
-  function handleDelete(index) {
-    setPeople((p) => p.filter((_, i) => i !== index));
+  function deletePerson(identifier) {
+    axios
+      .delete(`/user/${identifier}`)
+      .then(() => setPeople((p) => p.filter(({ id }) => id !== identifier)));
   }
+
+  useEffect(getPeople, []);
 
   return (
     <div css={tableWrapperCss}>
       <h1 css={titleCss}>Work Contacts</h1>
       <hr css={dividerCss} />
       <Table
-        onAdd={handleAdd}
-        onDelete={handleDelete}
+        onAdd={addPerson}
+        onDelete={deletePerson}
         fields={fields}
         contents={people}
       />
