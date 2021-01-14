@@ -58,7 +58,7 @@ def handle_users():
          id = uuid.uuid1().hex
          person = {"name" : payload["name"], "job" : payload["job"], "id" : id }
          users.append(person)
-         return id, 201
+         return person, 201
       else:
          return "Please include a payload in your post request", 400
    elif request.method == "DELETE":

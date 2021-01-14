@@ -42,12 +42,13 @@ function App() {
   }
 
   function addPerson(personData) {
-    let person = {};
+    let payload = {};
     for (let key in personData) {
-      person[key.toLowerCase()] = personData[key];
+      payload[key.toLowerCase()] = personData[key];
     }
-    axios.post("/users", person).then(({ data }) => {
-      person.id = data;
+    axios.post("/users", payload).then((res) => {
+      if (res.status !== 201) return;
+      const person = res.data;
       const updatedPeople = [...people, person];
       setPeople(updatedPeople);
     });
